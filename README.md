@@ -1,36 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⚡ PokéCache - TanStack Query v5 & React Server Components
 
-## Getting Started
+Aplicación web desarrollada con **Next.js 16+**, **TypeScript**, **Tailwind CSS** y **TanStack Query v5** para demostrar técnicas avanzadas de hidratación, prefetching en hover y gestión eficiente de caché.
 
-First, run the development server:
+## 🚀 Repositorio
+- **Repositorio:** [https://github.com/stanleygarcia22-del/poke-cache-app](https://github.com/stanleygarcia22-del/poke-cache-app)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🎯 Estrategia de Caché y Rendimiento
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. Servidor al Cliente (`HydrationBoundary`)
+- Los 50 Pokémon iniciales se obtienen en el servidor mediante un **React Server Component** (`src/app/page.tsx`).
+- Se utiliza `dehydrate` junto con `<HydrationBoundary>` para transferir la caché inicial sin realizar peticiones redundantes en el navegador durante la primera carga.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. Prefetching Estratégico en Hover (`onMouseEnter`)
+- En el componente client-side `PokemonCard.tsx`, el evento `onMouseEnter` dispara `queryClient.prefetchQuery`.
+- Cuando el usuario pasa el cursor sobre la tarjeta de un Pokémon, sus detalles (estadísticas, habilidades, tipos e imágenes) se descargan de fondo en cuestión de milisegundos.
+- Al hacer clic, la vista dinámica `/pokemon/[id]` muestra la información de forma **instantánea** desde la memoria caché.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. Configuración de Tiempos de Caché
+- **`staleTime: 24 * 60 * 60 * 1000` (24 Horas):** Se define que la información cargada mantendrá su estado "fresco" durante 24 horas, evitando re-peticiones innecesarias a la PokéAPI.
+- **`gcTime: 24 * 60 * 60 * 1000` (24 Horas):** Mantiene los datos en la memoria de recolector de basura por 24 horas para garantizar navegación fluida sin perder el estado durante la sesión del usuario.
 
-## Learn More
+## 🛠️ Instalación y Ejecución Local
 
-To learn more about Next.js, take a look at the following resources:
+1. Clonar el repositorio:
+   ```bash
+   git clone [https://github.com/stanleygarcia22-del/poke-cache-app.git](https://github.com/stanleygarcia22-del/poke-cache-app.git)
+   cd poke-cache-app
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Instalar dependencias: npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Ejecutar el servidor de desarrollo: npm run dev -- -h localhost
